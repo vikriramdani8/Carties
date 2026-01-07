@@ -1,0 +1,15 @@
+# Directories to ignore
+**/.dockerignore
+**/.git
+**/.gitignore
+**/.vs
+**/.vscode
+**/bin
+**/obj
+**/packages
+
+# File types to ignore
+**/*.user
+**/*.lock
+**/*.suo
+**/TestResults
