@@ -15,7 +15,18 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         options.TokenValidationParameters.ValidIssuers = new[] { builder.Configuration["IdentityServiceUrl"], "http://localhost:5001" };
     });
 
+builder.Services.AddCors(options =>
+{
+   options.AddPolicy("customPolicy", b =>
+   {
+      b.AllowAnyHeader()
+        .AllowAnyMethod().AllowCredentials().WithOrigins(builder.Configuration["ClientApp"]);
+   });
+});
+
 var app = builder.Build();
+
+app.UseCors();
 
 app.MapReverseProxy();
 
