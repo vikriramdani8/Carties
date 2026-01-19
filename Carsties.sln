@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityService", "src\Iden
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GatewayService", "src\GatewayService\GatewayService.csproj", "{478F3763-1821-4C92-AC31-98FEBA902DA1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BiddingService", "src\BiddingService\BiddingService.csproj", "{7A6421C4-BDDF-4193-9A54-3D0AA7D64250}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -85,6 +87,18 @@ Global
 		{478F3763-1821-4C92-AC31-98FEBA902DA1}.Release|x64.Build.0 = Release|Any CPU
 		{478F3763-1821-4C92-AC31-98FEBA902DA1}.Release|x86.ActiveCfg = Release|Any CPU
 		{478F3763-1821-4C92-AC31-98FEBA902DA1}.Release|x86.Build.0 = Release|Any CPU
+		{7A6421C4-BDDF-4193-9A54-3D0AA7D64250}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A6421C4-BDDF-4193-9A54-3D0AA7D64250}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A6421C4-BDDF-4193-9A54-3D0AA7D64250}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{7A6421C4-BDDF-4193-9A54-3D0AA7D64250}.Debug|x64.Build.0 = Debug|Any CPU
+		{7A6421C4-BDDF-4193-9A54-3D0AA7D64250}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{7A6421C4-BDDF-4193-9A54-3D0AA7D64250}.Debug|x86.Build.0 = Debug|Any CPU
+		{7A6421C4-BDDF-4193-9A54-3D0AA7D64250}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A6421C4-BDDF-4193-9A54-3D0AA7D64250}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A6421C4-BDDF-4193-9A54-3D0AA7D64250}.Release|x64.ActiveCfg = Release|Any CPU
+		{7A6421C4-BDDF-4193-9A54-3D0AA7D64250}.Release|x64.Build.0 = Release|Any CPU
+		{7A6421C4-BDDF-4193-9A54-3D0AA7D64250}.Release|x86.ActiveCfg = Release|Any CPU
+		{7A6421C4-BDDF-4193-9A54-3D0AA7D64250}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -95,6 +109,7 @@ Global
 		{6FD911CF-4751-462E-98F9-A08DEC390C98} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 		{0E3BFA35-50FE-4CB3-8C33-65B4530E16D7} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 		{478F3763-1821-4C92-AC31-98FEBA902DA1} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
+		{7A6421C4-BDDF-4193-9A54-3D0AA7D64250} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DAB29A85-F0C0-4F6F-8363-BA9E0D4A83E5}
