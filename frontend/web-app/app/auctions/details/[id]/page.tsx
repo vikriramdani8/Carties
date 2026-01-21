@@ -6,6 +6,7 @@ import { getCurrentUser } from "@/app/actions/authActions";
 import Link from "next/link";
 import { Button } from "flowbite-react";
 import DeleteAuction from "../../DeleteAuction";
+import DetailAuction from "./detailAuction";
 
 export default async function Details({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
@@ -42,35 +43,7 @@ export default async function Details({ params }: { params: Promise<{ id: string
                         <CountdownTimer auctionEnd={data.auctionEnd} />
                     </div>
 
-                    <div className="space-y-3">
-                        <div className="flex justify-between p-2 border-b">
-                            <span className="text-gray-600">Seller</span>
-                            <span className="font-medium text-gray-900">{data.seller}</span>
-                        </div>
-                        <div className="flex justify-between p-2 border-b">
-                            <span className="text-gray-600">Status</span>
-                            <span className={`font-medium ${data.status === 'Live' ? 'text-green-600' : 'text-red-600'}`}>{data.status}</span>
-                        </div>
-                        <div className="flex justify-between p-2 border-b">
-                            <span className="text-gray-600">Mileage</span>
-                            <span className="font-medium text-gray-900">{data.mileage.toLocaleString()} mi</span>
-                        </div>
-                        <div className="flex justify-between p-2 border-b">
-                            <span className="text-gray-600">Color</span>
-                            <span className="font-medium text-gray-900">{data.color}</span>
-                        </div>
-                        <div className="flex justify-between p-2 border-b">
-                            <span className="text-gray-600">Reserve Price</span>
-                            <span className="font-medium text-gray-900">{data.reservePrice && data.reservePrice > 0 ? data.reservePrice : 'No Reserve'}</span>
-                        </div>
-                        <div className="flex justify-between p-2">
-                            <span className="text-gray-600">Current High Bid</span>
-                            <span className="font-bold text-lg text-blue-600">
-                                {data.currentHighBid ? `$${data.currentHighBid.toLocaleString()}` : 'No bids'}
-                            </span>
-                        </div>
-                    </div>
-
+                    <DetailAuction auction={data} />
                 </div>
             </div>
         </div>
