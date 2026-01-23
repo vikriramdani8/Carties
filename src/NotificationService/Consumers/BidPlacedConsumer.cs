@@ -5,7 +5,7 @@ using NotificationService.Hubs;
 
 namespace GatewayService.Consumers;
 
-public class BidPlacedConsumer : IConsumer<AuctionCreated>
+public class BidPlacedConsumer : IConsumer<BidPlaced>
 {
     private readonly IHubContext<NotificationHub> _hubContext;
 
@@ -14,7 +14,7 @@ public class BidPlacedConsumer : IConsumer<AuctionCreated>
         _hubContext = hubContext;
     }
 
-    public async Task Consume(ConsumeContext<AuctionCreated> context)
+    public async Task Consume(ConsumeContext<BidPlaced> context)
     {
         Console.WriteLine("--> bid placed message received");
         await _hubContext.Clients.All.SendAsync("BidPlaced", context.Message);

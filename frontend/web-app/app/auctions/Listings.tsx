@@ -1,6 +1,5 @@
 'use client'
 
-import { Auction, PagedResult } from "@/types";
 import AuctionCard from "./AuctionCard";
 import AppPagination from "../components/AppPagination";
 import { useEffect, useState } from "react";
@@ -10,13 +9,20 @@ import { useParamsStore } from "@/hooks/useParamsStore";
 import { useShallow } from "zustand/shallow";
 import qs from "query-string";
 import AppEmptyFilter from "../components/AppEmptyFilter";
+import { useAuctionStore } from "@/hooks/useAuctionStore";
 
 export default function Listings() {
-    const [data, setData] = useState<PagedResult<Auction>>();
+    const [loading, setLoading] = useState(true);
+    
+    const data = useAuctionStore(useShallow(state => ({
+        auctions: state.auctions,
+        totalCount: state.totalCount,
+        pageCount: state.pageCount
+    })));
+
     const params = useParamsStore(useShallow(state => ({
         pageNumber: state.pageNumber,
         pageSize: state.pageSize,
-        pageCount: state.pageCount,
         searchTerm: state.searchTerm,
         orderBy: state.orderBy,
         filterBy: state.filterBy,
@@ -24,6 +30,7 @@ export default function Listings() {
         winner: state.winner
     })));
 
+    const setData = useAuctionStore(state => state.setData);
     const setParams = useParamsStore(state => state.setParams);
     const url = qs.stringifyUrl({url: '', query: params}, { skipEmptyString: true })
 
@@ -32,29 +39,27 @@ export default function Listings() {
     }
 
     useEffect(() => {
-        getData(url).then(data2 => {
-            setData(data2)
-            setParams({
-                pageCount: data2.pagecount
-            })
+        getData(url).then(response => {
+            setData(response)
+            setLoading(false)
         })
-    }, [url]);
+    }, [url, setData]);
 
-    if (!data) return <h3>Loading ...</h3>
+    if (loading) return <h3>Loading ...</h3>
 
     return (
         <>
             <AppFilter />
-            {data.totalcount == 0 ? ( 
+            {data.totalCount == 0 ? ( 
                 <AppEmptyFilter showReset />
             ) : (
                 <>
                     <div className="grid grid-cols-4 gap-6 mt-4">
-                        {data && data.result.map((auction: any) => (
+                        {data && data.auctions.map((auction: any) => (
                             <AuctionCard key={auction.id} auction={auction} />
                         ))}
                     </div>
-                    <AppPagination pageChanged={setPageNumber} currentPage={params.pageNumber} pageCount={params.pageCount} />
+                    <AppPagination pageChanged={setPageNumber} currentPage={params.pageNumber} pageCount={data.pageCount} />
                 </>  
             )}
         </>

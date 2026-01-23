@@ -22,7 +22,7 @@ export default function AppEmptyFilter({
     const reset = useParamsStore(state => state.reset);
 
     return (
-        <div className='w-full h-100 flex justify-center items-center gap-2 flex-col'>
+        <div className='w-full flex justify-center items-center gap-2 flex-col'>
             <h1 className='text-black'>{title}</h1>
             <p className='text-gray-400'>{subTitle}</p>
 

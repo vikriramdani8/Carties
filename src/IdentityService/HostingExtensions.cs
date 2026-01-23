@@ -64,6 +64,10 @@ internal static class HostingExtensions
                 options.Events.RaiseInformationEvents = true;
                 options.Events.RaiseFailureEvents = true;
                 options.Events.RaiseSuccessEvents = true;
+                options.IssuerUri = builder.Configuration["IssueUri"];
+                options.UserInteraction.ErrorUrl = "/Error";
+                options.UserInteraction.LoginUrl = "/Account/Login/Index";
+                options.UserInteraction.LogoutUrl = "/Account/Logout/Index";
 
                 // Use a large chunk size for diagnostic data in development where it will be redirected to a local file.
                 if (builder.Environment.IsDevelopment())
@@ -73,7 +77,7 @@ internal static class HostingExtensions
             })
             .AddInMemoryIdentityResources(Config.IdentityResources)
             .AddInMemoryApiScopes(Config.ApiScopes)
-            .AddInMemoryClients(Config.Clients)
+            .AddInMemoryClients(Config.Clients(builder.Configuration))
             .AddAspNetIdentity<ApplicationUser>()
             .AddLicenseSummary()
             .AddProfileService<CustomProfileService>();
@@ -84,24 +88,6 @@ internal static class HostingExtensions
         });
 
         builder.Services.AddAuthentication();
-        // builder.Services.AddAuthentication()
-        //     .AddOpenIdConnect("oidc", "Sign-in with demo.duendesoftware.com", options =>
-        //     {
-        //         options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
-        //         options.SignOutScheme = IdentityServerConstants.SignoutScheme;
-        //         options.SaveTokens = true;
-
-        //         options.Authority = "https://demo.duendesoftware.com";
-        //         options.ClientId = "interactive.confidential";
-        //         options.ClientSecret = "secret";
-        //         options.ResponseType = "code";
-
-        //         options.TokenValidationParameters = new TokenValidationParameters
-        //         {
-        //             NameClaimType = "name",
-        //             RoleClaimType = "role"
-        //         };
-        //     });
 
         return builder.Build();
     }

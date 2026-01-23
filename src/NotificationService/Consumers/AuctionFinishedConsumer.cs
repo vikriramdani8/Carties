@@ -5,7 +5,7 @@ using NotificationService.Hubs;
 
 namespace GatewayService.Consumers;
 
-public class AuctionFinishedConsumer : IConsumer<AuctionCreated>
+public class AuctionFinishedConsumer : IConsumer<AuctionFinished>
 {
     private readonly IHubContext<NotificationHub> _hubContext;
 
@@ -14,7 +14,7 @@ public class AuctionFinishedConsumer : IConsumer<AuctionCreated>
         _hubContext = hubContext;
     }
 
-    public async Task Consume(ConsumeContext<AuctionCreated> context)
+    public async Task Consume(ConsumeContext<AuctionFinished> context)
     {
         Console.WriteLine("--> auction finished message received");
         await _hubContext.Clients.All.SendAsync("AuctionFinished", context.Message);
