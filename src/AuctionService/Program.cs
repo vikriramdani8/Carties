@@ -1,3 +1,4 @@
+using AuctionService;
 using AuctionService.Consumers;
 using AuctionService.Data;
 using AuctionService.Services;
@@ -53,6 +54,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 builder.Services.AddGrpc();
+builder.Services.AddScoped<IAuctionRepository, AuctionRepository>();
 
 var app = builder.Build();
 
@@ -79,3 +81,5 @@ try
 }
 
 app.Run();
+
+public partial class Program {}

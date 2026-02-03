@@ -15,12 +15,12 @@ namespace AuctionService.Controllers;
 [Route("api/auctions")]
 public class AuctionsController : ControllerBase
 {
-    private readonly AuctionDbContext context;
+    private readonly IAuctionRepository _repo;
     private readonly IMapper mapper;
     private readonly IPublishEndpoint publishEndpoint;
-    public AuctionsController(AuctionDbContext context, IMapper mapper, IPublishEndpoint publishEndpoint)
+    public AuctionsController(IAuctionRepository repo, IMapper mapper, IPublishEndpoint publishEndpoint)
     {
-        this.context = context;
+        _repo = repo;
         this.mapper = mapper;
         this.publishEndpoint = publishEndpoint;
     }
@@ -28,26 +28,17 @@ public class AuctionsController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<List<AuctionDto>>> GetAllAuctions(string? date)
     {
-        var query = context.Auctions.OrderBy(x => x.Item.Make).AsQueryable();
-
-        if (!string.IsNullOrEmpty(date))
-        {
-            query = query.Where(x => x.UpdatedAt.CompareTo(DateTime.Parse(date).ToUniversalTime()) > 0 );
-        }
-                                
-        return await query.ProjectTo<AuctionDto>(mapper.ConfigurationProvider).ToListAsync();
+        return await _repo.GetAuctionsAsync(date);
     }
 
     [HttpGet("{id}")]
     public async Task<ActionResult<AuctionDto>> GetAuctionById(Guid id)
     {
-        var auction = await context.Auctions
-                                .Include(x => x.Item)
-                                .FirstOrDefaultAsync(x => x.Id == id);
+        var auction = await _repo.GetAuctionByIdAsync(id);
 
         if(auction == null) return NotFound();
         
-        return mapper.Map<AuctionDto>(auction);
+        return auction;
     }
 
     [Authorize]
@@ -55,14 +46,14 @@ public class AuctionsController : ControllerBase
     public async Task<ActionResult<AuctionDto>> CreateAuction(CreateAuctionDto auctionDto)
     {
         var auction = mapper.Map<Auction>(auctionDto);
-        auction.Seller = User.Identity?.Name!;
+        auction.Seller = User.Identity.Name;
 
-        context.Auctions.Add(auction);
+        _repo.AddAuction(auction);
 
         var newAuction = mapper.Map<AuctionDto>(auction);
         await publishEndpoint.Publish(mapper.Map<AuctionCreated>(newAuction));
 
-        var result = await context.SaveChangesAsync() > 0; 
+        var result = await _repo.SaveChangesAsync(); 
         
         if(!result) return BadRequest("Could not save changes to the DB");
 
@@ -71,9 +62,7 @@ public class AuctionsController : ControllerBase
 
     [HttpPut("{id}")]
     public async Task<ActionResult> UpdateAuction(Guid id, UpdateAuctionDto updateAuctionDto){
-        var auction = await context.Auctions
-                            .Include(x => x.Item)
-                            .FirstOrDefaultAsync(x => x.Id == id);
+        var auction = await _repo.GetAuctionEntityById(id);
 
         if(auction is null) return NotFound();
 
@@ -87,7 +76,7 @@ public class AuctionsController : ControllerBase
 
         await publishEndpoint.Publish(mapper.Map<AuctionUpdated>(auction));
 
-        var result = await context.SaveChangesAsync() > 0;
+        var result = await _repo.SaveChangesAsync();
 
         if(result) return Ok();
 
@@ -97,19 +86,20 @@ public class AuctionsController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<ActionResult> DeleteAuction(Guid id)
     {
-        var auction = await context.Auctions.FindAsync(id);
+        var auction = await _repo.GetAuctionEntityById(id);
 
         if(auction is null) return NotFound();
 
-        context.Auctions.Remove(auction);
+        if (auction.Seller != User.Identity.Name) return Forbid();
+
+        _repo.RemoveAuction(auction);
 
         await publishEndpoint.Publish<AuctionDeleted>(new { Id = auction.Id.ToString() });
 
-        var result = await context.SaveChangesAsync() > 0;
+        var result = await _repo.SaveChangesAsync();
 
         if(result) return Ok();
 
         return BadRequest("Problem delete item");
     }
-
 }
