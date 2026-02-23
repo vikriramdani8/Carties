@@ -2,6 +2,9 @@ using System.Globalization;
 using System.Text;
 using Duende.IdentityServer.Licensing;
 using IdentityService;
+using Microsoft.EntityFrameworkCore;
+using Npgsql;
+using Polly;
 using Serilog;
 
 Log.Logger = new LoggerConfiguration()
@@ -19,17 +22,17 @@ try
         .ConfigureServices()
         .ConfigurePipeline();
 
-    // this seeding is only for the template to bootstrap the DB and users.
-    // in production you will likely want a different approach.
-    // if (args.Contains("/seed"))
-    // {
-    //     Log.Information("Seeding database...");
-    //     SeedData.EnsureSeedData(app);
-    //     Log.Information("Done seeding database. Exiting.");
-    //     return;
-    // }
+    var retryPolicy = Policy
+        .Handle<NpgsqlException>()
+        .WaitAndRetry(5, retryAttemp => TimeSpan.FromSeconds(5));
 
-    SeedData.EnsureSeedData(app);
+    retryPolicy.Execute(() =>
+    {
+        using var scope = app.Services.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<IdentityService.Data.ApplicationDbContext>();
+        db.Database.Migrate();
+        SeedData.EnsureSeedData(app);
+    });
 
     if (app.Environment.IsDevelopment())
     {

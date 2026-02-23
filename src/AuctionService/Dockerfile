@@ -12,7 +12,7 @@ RUN dotnet publish ./src/AuctionService/AuctionService.csproj -c Release -o /app
 
 FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS runner
 WORKDIR /app
-
+ENV ASPNETCORE_HTTP_PORTS=80
 EXPOSE 80
 
 COPY --from=build /app/publish .

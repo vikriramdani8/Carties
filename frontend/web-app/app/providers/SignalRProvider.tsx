@@ -11,16 +11,15 @@ import { toast, Toaster } from 'react-hot-toast';
 import AppAuctionCreatedToast from '../components/AppAuctionCreatedToast';
 import AppAuctionFinishedToast from '../components/AppAuctionFinishedToast';
 import { getDetailedViewData } from '../actions/auctionAction';
-import { useSession } from 'next-auth/react';
+
 
 type Props = {
-    children: ReactNode,
+    children: ReactNode
+    user: User | null
+    notifyUrl: string
 }
 
-export default function SignalRProvider({ children }: Props) {
-    const session = useSession();
-    const user = session.data?.user;
-
+export default function SignalRProvider({ children, user, notifyUrl }: Props) {
     const connection = useRef<HubConnection | null>(null);
     const setCurrentPrice = useAuctionStore(state => state.setCurrentPrice);
     const addBid = useBidStore(state => state.addBid);
@@ -30,9 +29,9 @@ export default function SignalRProvider({ children }: Props) {
         const auction = getDetailedViewData(finishedAuction.auctionId);
         return toast.promise(auction, {
             loading: 'loading',
-            success: (auction) => <AppAuctionFinishedToast auction={auction} finishedAuction={finishedAuction}  />,
+            success: (auction) => <AppAuctionFinishedToast auction={auction} finishedAuction={finishedAuction} />,
             error: (err) => 'Auction finished'
-        }, {success: {duration: 10000, icon: null, position: 'bottom-right'}})
+        }, { success: { duration: 10000, icon: null, position: 'bottom-right' } })
     }, [])
 
     const handleAuctionCreated = useCallback((auction: Auction) => {
@@ -57,8 +56,9 @@ export default function SignalRProvider({ children }: Props) {
     }, [setCurrentPrice, addBid, params.id])
 
     useEffect(() => {
+        if (!notifyUrl) return;
         const newConnection = new HubConnectionBuilder()
-            .withUrl(process.env.NEXT_PUBLIC_NOTIFY_URL!)
+            .withUrl(notifyUrl)
             .withAutomaticReconnect()
             .build();
 

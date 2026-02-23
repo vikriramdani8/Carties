@@ -24,8 +24,8 @@ builder.Services.AddMassTransit(x =>
     {
         cfg.Host(builder.Configuration["RabbitMq:Host"], "/", h =>
         {
-           h.Username(builder.Configuration.GetValue("RabbitMq:Username", "guest"));
-           h.Password(builder.Configuration.GetValue("RabbitMq:Password", "guest")); 
+           h.Username(builder.Configuration.GetValue("RabbitMq:Username", "rabbit"));
+           h.Password(builder.Configuration.GetValue("RabbitMq:Password", "rabbitpw")); 
         });
 
         cfg.ReceiveEndpoint("search-auction-created", e =>
@@ -65,14 +65,9 @@ app.MapControllers();
 
 app.Lifetime.ApplicationStarted.Register(async () =>
 {
-   try
-    {
-        await DbInitializer.InitDb(app);
-    } catch (Exception ex)
-    {
-        Console.WriteLine($"Error initializing database: {ex.Message}");
-        throw;
-    } 
+   await Policy.Handle<TimeoutException>()
+    .WaitAndRetryAsync(5, retryAttemp => TimeSpan.FromSeconds(10))
+    .ExecuteAndCaptureAsync(async () => await DbInitializer.InitDb(app));
 });
 
 app.Run();
