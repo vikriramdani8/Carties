@@ -18,7 +18,7 @@ jobs:
                 - name: 'svgengrawuh/search-svc'
                   path: 'src/SearchService'
                 - name: 'svgengrawuh/bid-svc'
-                  path: 'src/BidService'
+                  path: 'src/BiddingService'
                 - name: 'svgengrawuh/identity-svc'
                   path: 'src/IdentityService'
                 - name: 'svgengrawuh/gateway-svc'
