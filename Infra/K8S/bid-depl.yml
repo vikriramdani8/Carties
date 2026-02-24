@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
       - name: bid-svc
-        image: trycatchlearn/bid-svc
+        image: svgengrawuh/bid-svc
         imagePullPolicy: Never
         env:
           - name: RabbitMq__Username

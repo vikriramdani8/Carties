@@ -13,7 +13,7 @@ jobs:
     strategy:
         matrix:
             service:
-                - name: 'trycatchlearn/auction-svc'
+                - name: 'svgengrawuh/auction-svc'
                   path: 'src/AuctionService'
 
     steps:

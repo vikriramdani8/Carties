@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
       - name: auction-svc
-        image: trycatchlearn/auction-svc
+        image: svgengrawuh/auction-svc
         imagePullPolicy: Never
         env:
           - name: ConnectionStrings__DefaultConnection

@@ -46,7 +46,7 @@ services:
       timeout: 5s
       retries: 5
   auction-svc:
-    image: trycatchlearn/auction-svc:latest
+    image: svgengrawuh/auction-svc:latest
     build:
       context: .
       dockerfile: src/AuctionService/Dockerfile
@@ -69,7 +69,7 @@ services:
       rabbitmq:
         condition: service_healthy
   search-svc:
-    image: trycatchlearn/search-svc:latest
+    image: svgengrawuh/search-svc:latest
     build:
       context: .
       dockerfile: src/SearchService/Dockerfile
@@ -87,7 +87,7 @@ services:
       rabbitmq:
         condition: service_started
   identity-svc:
-    image: trycatchlearn/identity-svc:latest
+    image: svgengrawuh/identity-svc:latest
     build:
       context: .
       dockerfile: src/IdentityService/Dockerfile
@@ -102,7 +102,7 @@ services:
       postgres:
         condition: service_healthy
   gateway-svc:
-    image: trycatchlearn/gateway-svc:latest
+    image: svgengrawuh/gateway-svc:latest
     build:
       context: .
       dockerfile: src/GatewayService/Dockerfile
@@ -113,7 +113,7 @@ services:
       - VIRTUAL_HOST=api.carsties.local
       - IssueUri=https://app.carsties.local
   bid-svc:
-    image: trycatchlearn/bid-svc:latest
+    image: svgengrawuh/bid-svc:latest
     build: 
       context: .
       dockerfile: src/BiddingService/Dockerfile
@@ -130,7 +130,7 @@ services:
       - mongodb
       - rabbitmq
   notify-svc:
-    image: trycatchlearn/notify-svc:latest
+    image: svgengrawuh/notify-svc:latest
     build: 
       context: .
       dockerfile: src/NotificationService/Dockerfile
@@ -143,7 +143,7 @@ services:
     depends_on:
       - rabbitmq
   web-app:
-    image: trycatchlearn/web-app:latest
+    image: svgengrawuh/web-app:latest
     build:
       context: .
       dockerfile: frontend/web-app/Dockerfile

@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
       - name: webapp-svc
-        image: trycatchlearn/web-app
+        image: svgengrawuh/web-app
         imagePullPolicy: Never
         env:
           - name: AUTH_SECRET
