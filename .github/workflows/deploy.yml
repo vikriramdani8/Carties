@@ -15,6 +15,18 @@ jobs:
             service:
                 - name: 'svgengrawuh/auction-svc'
                   path: 'src/AuctionService'
+                - name: 'svgengrawuh/search-svc'
+                  path: 'src/SearchService'
+                - name: 'svgengrawuh/bid-svc'
+                  path: 'src/BidService'
+                - name: 'svgengrawuh/identity-svc'
+                  path: 'src/IdentityService'
+                - name: 'svgengrawuh/gateway-svc'
+                  path: 'src/GatewayService'
+                - name: 'svgengrawuh/notify-svc'
+                  path: 'src/NotificationService'
+                - name: 'svgengrawuh/web-app'
+                  path: 'frontend/web-app'
 
     steps:
     - name: Checkout code
